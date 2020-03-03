@@ -15,21 +15,20 @@ RUN apt-get update && apt-get install -y \
   libssh2-1-dev \
   libxslt1-dev \
   libzip-dev \
+  libwebp-dev \
+  libpng-dev libxpm-dev \
   lsof \
   default-mysql-client \
   vim \
   zip
 
-RUN apt-get install -y \
-    libwebp-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev libxpm-dev \
-    libfreetype6-dev
-
 RUN docker-php-ext-install gd
 
 RUN docker-php-ext-configure \
-  gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+  gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-webp-dir \
+    --with-png-dir \
+    --with-zlib-dir \
+    --with-xpm-dir
 
 RUN docker-php-ext-install \
   bcmath \
@@ -52,16 +51,6 @@ RUN docker-php-ext-install \
   sysvshm \
   xsl \
   zip
-
-RUN docker-php-ext-configure gd \
-    --with-gd \
-    --with-webp-dir \
-    --with-jpeg-dir \
-    --with-png-dir \
-    --with-zlib-dir \
-    --with-xpm-dir \
-    --with-freetype-dir \
-    --enable-gd-native-ttf
 
 RUN cd /tmp \
   && curl -O https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \

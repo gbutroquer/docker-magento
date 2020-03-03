@@ -1,5 +1,5 @@
 FROM php:7.3-fpm-buster
-MAINTAINER Mark Shust <mark@shust.com>
+MAINTAINER Gorka Beguiristain <gorka.beguiristain@troquer.com.mx>
 
 RUN apt-get update && apt-get install -y \
   cron \
@@ -19,6 +19,14 @@ RUN apt-get update && apt-get install -y \
   default-mysql-client \
   vim \
   zip
+
+RUN apt-get install -y \
+    libwebp-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev libxpm-dev \
+    libfreetype6-dev
+
+RUN docker-php-ext-install gd
 
 RUN docker-php-ext-configure \
   gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
@@ -44,6 +52,16 @@ RUN docker-php-ext-install \
   sysvshm \
   xsl \
   zip
+
+RUN docker-php-ext-configure gd \
+    --with-gd \
+    --with-webp-dir \
+    --with-jpeg-dir \
+    --with-png-dir \
+    --with-zlib-dir \
+    --with-xpm-dir \
+    --with-freetype-dir \
+    --enable-gd-native-ttf
 
 RUN cd /tmp \
   && curl -O https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
